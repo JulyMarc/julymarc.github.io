@@ -11,16 +11,16 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://naliev.com/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%23222833'%3E%3Ccircle cx='2' cy='3' r='1.3'/%3E%3Ccircle cx='4.5' cy='12' r='1.3'/%3E%3Ccircle cx='6' cy='6' r='1.3'/%3E%3C/g%3E%3Crect x='8' y='6.6' width='8' height='2.8' rx='1.4' fill='%232e4fc9'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/familjen-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+@font-face{font-family:"Familjen Grotesk";font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/familjen-grotesk-latin.woff2) format("woff2")}
 :root{--ground:oklch(97.5% .004 240);--ink:oklch(20% .01 250);--muted:oklch(48% .01 250);--line:oklch(88% .006 250);--accent:oklch(47% .19 262);--m:clamp(16px,5vw,80px);color-scheme:light dark}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ground:oklch(17% .01 250);--ink:oklch(94% .005 240);--muted:oklch(72% .01 250);--line:oklch(32% .01 250);--accent:oklch(72% .13 262)}}
 :root[data-theme=dark]{--ground:oklch(17% .01 250);--ink:oklch(94% .005 240);--muted:oklch(72% .01 250);--line:oklch(32% .01 250);--accent:oklch(72% .13 262)}
 *{box-sizing:border-box;margin:0}
 body{background:var(--ground);color:var(--ink);font:400 18px/1.5 "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;font-kerning:normal}
-canvas{display:block;width:100%;height:clamp(40px,4.5vw,64px)}
+canvas{display:block;width:100%;height:clamp(40px,4.5vw,64px);cursor:grab;touch-action:pan-y}
+canvas:active{cursor:grabbing}
 .w{padding-inline:var(--m);max-width:1440px;margin-inline:auto}
 header{display:flex;flex-direction:column;gap:4px;padding-block:32px 72px}
 .name{font-size:24px;line-height:1.25;font-weight:600}
@@ -63,16 +63,20 @@ footer a{padding-block:10px}
 // (particles per px x speed = const): the stream narrows, compresses and speeds up.
 (()=>{const c=document.querySelector("canvas"),g=c.getContext("2d"),R=Math.random,E=.55,
 rm=matchMedia("(prefers-reduced-motion: reduce)").matches;
-let W,H,r,P=[],ink,acc;
+let W,H,r,P=[],ink,acc,M={x:-1e4,y:-1e4,dx:0,dy:0,down:0,moved:0};
 const ss=v=>(v=Math.min(Math.max(v,0),1),v*v*(3-2*v)),T=x=>ss((x/W-E+.14)/.28),
 F=x=>ss((x/W-.73)/.15),amp=(t,f)=>H*.38*(1-t)+(H*.17*(1-f)+r*.5*f)*t,
 spd=(t,f)=>.5*(1+.2*t+.1*f),
 rgb=s=>{const k=document.createElement("canvas").getContext("2d");k.fillStyle=s;k.fillRect(0,0,1,1);return k.getImageData(0,0,1,1).data},
 col=()=>{const s=getComputedStyle(document.body);ink=rgb(s.color);acc=rgb(s.getPropertyValue("--accent"))},
 mix=k=>`rgb(${[0,1,2].map(i=>ink[i]+(acc[i]-ink[i])*k|0)})`,
-nu=x=>({x,y:R()*H,l:R()*3|0});
-function step(){for(const p of P){const t=T(p.x),f=F(p.x),u=1-t,
+nu=x=>({x,y:R()*H,l:R()*3|0,vx:0,vy:0});
+function step(){const K=Math.max(40,H*1.2);for(const p of P){const t=T(p.x),f=F(p.x),u=1-t,
 ty=H/2+amp(t,f)*Math.sin(p.l*2.094+p.x/H*.8);
+// Pointer: hovering stirs, dragging plucks strands vertically; order springs back via the pull to ty.
+const ex=M.x-p.x,ey=M.y-p.y,d=Math.hypot(ex,ey);if(d<K){const k=1-d/K;
+if(M.down)p.y+=ey*.15*k;else{p.vx+=M.dx*.06*k;p.vy+=M.dy*.06*k}}
+p.x+=p.vx;p.y+=p.vy;p.vx*=.9;p.vy*=.9;
 p.x+=spd(t,f)+(R()-.5)*2*u;p.y+=(R()-.5)*2*u+(ty-p.y)*.09*t;
 p.y=Math.min(H-1,Math.max(1,p.y));p.t=t;p.f=f;if(p.x>W+4)Object.assign(p,nu(-4))}}
 function draw(){g.clearRect(0,0,W,H);for(const p of P){g.fillStyle=mix(Math.max(0,(p.t-.45)/.55));g.beginPath();g.arc(p.x,p.y,r*(1+.6*p.f),0,6.3);g.fill()}}
@@ -81,7 +85,14 @@ r=Math.max(1.1,Math.min(2.4,H/40+.4));col();P=[];const n=W*H/50|0;
 // Steady state: particles per px are inversely proportional to speed.
 while(P.length<n){const x=R()*W;if(R()<spd(0,0)/spd(T(x),F(x)))P.push(nu(x))}
 for(let i=0;i<150;i++)step();draw()}
-function loop(){step();draw();requestAnimationFrame(loop)}
+function loop(){step();draw();M.dx*=.5;M.dy*=.5;requestAnimationFrame(loop)}
+const cl=v=>Math.max(-25,Math.min(25,v)),pos=e=>{const b=c.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,f=M.x>-1e3;M.dx=f?cl(x-M.x):0;M.dy=f?cl(y-M.y):0;M.x=x;M.y=y};
+addEventListener("pointermove",e=>{pos(e);if(M.down&&Math.abs(M.dx)+Math.abs(M.dy)>2)M.moved=1});
+c.addEventListener("pointerdown",e=>{pos(e);M.dx=M.dy=0;M.down=1;M.moved=0;c.setPointerCapture(e.pointerId)});
+// A click without dragging sends a shock wave.
+c.addEventListener("pointerup",()=>{M.down=0;if(!M.moved)for(const p of P){const ex=p.x-M.x,ey=p.y-M.y,d=Math.hypot(ex,ey)+.1,K=H*2.5;if(d<K){const k=(1-d/K)*5/d;p.vx+=ex*k;p.vy+=ey*k}}});
+c.addEventListener("pointercancel",()=>M.down=0);
+document.addEventListener("pointerleave",()=>{M.x=M.y=-1e4});
 init();addEventListener("resize",()=>{clearTimeout(c.z);c.z=setTimeout(init,150)});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{col();draw()});
 if(!rm)requestAnimationFrame(loop)})();
