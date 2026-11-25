@@ -29,11 +29,11 @@ header{display:flex;flex-direction:column;gap:4px;padding-block:32px 72px}
 h2{font-size:18px;font-weight:600;color:var(--muted);padding-bottom:16px}
 .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px 48px;border-top:1px solid var(--line);padding-block:20px 24px}
 .card h3{font-size:18px;font-weight:600}
+.card h3 a{display:inline-block;padding-block:2px}
 .card p{max-width:62ch}
 a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 a:hover{text-decoration-thickness:2px}
 a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
-.card a{display:inline-block;padding-block:6px}
 footer{display:flex;flex-wrap:wrap;gap:8px 40px;padding-block:48px}
 footer a{padding-block:10px}
 .mail{font-weight:600}
@@ -48,11 +48,11 @@ footer a{padding-block:10px}
 </header>
 <main class="w">
 <h2>Work</h2>
-<article class="card"><h3>Nordic Power Lab</h3><div><p>Live forecasts of the Danish imbalance price from open data. Every input is stored with the time it became known, every claim is written down before its test, and failed claims stay in the record.</p><a href="/nordic-power-lab/">naliev.com/nordic-power-lab</a></div></article>
-<article class="card"><h3>Hedge-fund vacancy monitor</h3><div><p>A Telegram bot and channel that watch the career pages of about 100 hedge funds, prop shops and trading firms, remove duplicates and publish new roles as they appear.</p></div></article>
-<article class="card"><h3>vat.qa</h3><div><p>Evidence tracker for VAT in Qatar: official sources in English and Arabic, checked daily, with the date of the last check on the page.</p><a href="https://vat.qa">vat.qa</a></div></article>
-<article class="card"><h3>Bounded Autoresearch</h3><div><p>A control plane for experiments run by AI agents: frozen objective and budget, a hash-chained event ledger, resumable runs, and only verified improvements promoted.</p><a href="https://github.com/JulyMarc/bounded-autoresearch">github.com/JulyMarc/bounded-autoresearch</a></div></article>
-<article class="card"><h3>Auditable Agent Harness</h3><div><p>A local-first control plane for supervised coding and research agents: task contracts, bounded context, budget checks, approval gates and a replayable ledger.</p><a href="https://github.com/JulyMarc/auditable-agent-harness">github.com/JulyMarc/auditable-agent-harness</a></div></article>
+<article class="card"><h3><a href="/nordic-power-lab/">Nordic Power Lab</a></h3><div><p>Live 30-minute-to-3-hour forecasts of the Danish imbalance price, built from open data. That price sets what wind farms, batteries and traders pay for missing their schedule, so knowing its direction early lets them adjust before it is settled. Every claim is written down before its test; the money value is being measured in a live test that runs until February 2027.</p></div></article>
+<article class="card"><h3>Hedge-fund vacancy monitor</h3><div><p>A Telegram channel with almost 2,000 subscribers and a companion bot. It watches the career pages of about 100 hedge funds, prop shops and trading firms, removes duplicates and publishes new roles as they appear.</p></div></article>
+<article class="card"><h3><a href="https://vat.qa">vat.qa</a></h3><div><p>Evidence tracker for VAT in Qatar, built on official sources in English and Arabic and checked daily.</p></div></article>
+<article class="card"><h3><a href="https://github.com/JulyMarc/bounded-autoresearch">Bounded Autoresearch</a></h3><div><p>A control plane for experiments run by AI agents: frozen objective and budget, a hash-chained event ledger, resumable runs, and only verified improvements promoted.</p></div></article>
+<article class="card"><h3><a href="https://github.com/JulyMarc/auditable-agent-harness">Auditable Agent Harness</a></h3><div><p>A local-first control plane for supervised coding and research agents: task contracts, bounded context, budget checks, approval gates and a replayable ledger.</p></div></article>
 </main>
 <footer class="w">
 <a class="mail" href="mailto:hello@naliev.com">hello@naliev.com</a>
