@@ -59,27 +59,27 @@ footer a{padding-block:10px}
 <a href="https://github.com/JulyMarc">GitHub</a>
 </footer>
 <script>
-// Chaos to cable: particles drift right and twist into one strand. Flux is conserved
-// (density x width x speed = const), so they speed up as the strand narrows.
+// Chaos -> three twisted strands -> one solid stream. Flux is conserved
+// (particles per px x speed = const): the stream narrows, compresses and speeds up.
 (()=>{const c=document.querySelector("canvas"),g=c.getContext("2d"),R=Math.random,E=.55,
 rm=matchMedia("(prefers-reduced-motion: reduce)").matches;
 let W,H,r,P=[],ink,acc;
 const ss=v=>(v=Math.min(Math.max(v,0),1),v*v*(3-2*v)),T=x=>ss((x/W-E+.14)/.28),
-amp=t=>H*.38*(1-t)+Math.max(r*2.2,H*.17)*t,wid=t=>2*amp(t)+4*r,rho=t=>1+1.5*t,
-spd=t=>.5*wid(0)/wid(t)/rho(t),
+F=x=>ss((x/W-.73)/.15),amp=(t,f)=>H*.38*(1-t)+(H*.17*(1-f)+r*.5*f)*t,
+spd=(t,f)=>.5*(1+.2*t+.1*f),
 rgb=s=>{const k=document.createElement("canvas").getContext("2d");k.fillStyle=s;k.fillRect(0,0,1,1);return k.getImageData(0,0,1,1).data},
 col=()=>{const s=getComputedStyle(document.body);ink=rgb(s.color);acc=rgb(s.getPropertyValue("--accent"))},
 mix=k=>`rgb(${[0,1,2].map(i=>ink[i]+(acc[i]-ink[i])*k|0)})`,
 nu=x=>({x,y:R()*H,l:R()*3|0});
-function step(){for(const p of P){const t=T(p.x),u=1-t,
-ty=H/2+amp(t)*Math.sin(p.l*2.094+p.x/H*.8);
-p.x+=spd(t)+(R()-.5)*2*u;p.y+=(R()-.5)*2*u+(ty-p.y)*.09*t;
-p.y=Math.min(H-1,Math.max(1,p.y));p.t=t;if(p.x>W+4)Object.assign(p,nu(-4))}}
-function draw(){g.clearRect(0,0,W,H);for(const p of P){g.fillStyle=mix(Math.max(0,(p.t-.45)/.55));g.beginPath();g.arc(p.x,p.y,r,0,6.3);g.fill()}}
+function step(){for(const p of P){const t=T(p.x),f=F(p.x),u=1-t,
+ty=H/2+amp(t,f)*Math.sin(p.l*2.094+p.x/H*.8);
+p.x+=spd(t,f)+(R()-.5)*2*u;p.y+=(R()-.5)*2*u+(ty-p.y)*.09*t;
+p.y=Math.min(H-1,Math.max(1,p.y));p.t=t;p.f=f;if(p.x>W+4)Object.assign(p,nu(-4))}}
+function draw(){g.clearRect(0,0,W,H);for(const p of P){g.fillStyle=mix(Math.max(0,(p.t-.45)/.55));g.beginPath();g.arc(p.x,p.y,r*(1+.6*p.f),0,6.3);g.fill()}}
 function init(){const d=devicePixelRatio||1;W=c.clientWidth;H=c.clientHeight;c.width=W*d;c.height=H*d;g.setTransform(d,0,0,d,0,0);
-r=Math.max(1.1,Math.min(2.4,H/40+.4));col();P=[];const n=W*H/55|0;
-// Steady state: particles per unit length are proportional to density x width.
-while(P.length<n){const x=R()*W,t=T(x);if(R()<rho(t)*wid(t)/wid(0))P.push(nu(x))}
+r=Math.max(1.1,Math.min(2.4,H/40+.4));col();P=[];const n=W*H/50|0;
+// Steady state: particles per px are inversely proportional to speed.
+while(P.length<n){const x=R()*W;if(R()<spd(0,0)/spd(T(x),F(x)))P.push(nu(x))}
 for(let i=0;i<150;i++)step();draw()}
 function loop(){step();draw();requestAnimationFrame(loop)}
 init();addEventListener("resize",()=>{clearTimeout(c.z);c.z=setTimeout(init,150)});
