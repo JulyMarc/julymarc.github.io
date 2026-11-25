@@ -22,9 +22,9 @@
 body{background:var(--ground);color:var(--ink);font:400 18px/1.5 "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;font-kerning:normal}
 canvas{display:block;width:100%;height:clamp(40px,4.5vw,64px)}
 .w{padding-inline:var(--m);max-width:1440px;margin-inline:auto}
-header{display:flex;justify-content:space-between;align-items:baseline;gap:24px 48px;padding-block:32px 72px}
-.name{font-weight:600;white-space:nowrap}
-.tag{font-size:21px;line-height:1.4;max-width:34ch;text-wrap:balance}
+header{display:flex;flex-direction:column;gap:4px;padding-block:32px 72px}
+.name{font-size:24px;line-height:1.25;font-weight:600}
+.tag{line-height:1.4}
 .role{color:var(--muted)}
 h2{font-size:18px;font-weight:600;color:var(--muted);padding-bottom:16px}
 .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px 48px;border-top:1px solid var(--line);padding-block:20px 24px}
@@ -37,7 +37,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius
 footer{display:flex;flex-wrap:wrap;gap:8px 40px;padding-block:48px}
 footer a{padding-block:10px}
 .mail{font-weight:600}
-@media (max-width:720px){header{flex-direction:column;padding-block:24px 48px}.card{grid-template-columns:1fr}footer{flex-direction:column;gap:0}}
+@media (max-width:720px){header{padding-block:24px 48px}.card{grid-template-columns:1fr}footer{flex-direction:column;gap:0}}
 </style>
 </head>
 <body>
