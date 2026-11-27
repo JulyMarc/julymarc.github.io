@@ -26,6 +26,9 @@ header{display:flex;flex-direction:column;gap:4px;padding-block:32px 72px}
 .name{font-size:24px;line-height:1.25;font-weight:600}
 .tag{line-height:1.4}
 .role{color:var(--muted)}
+/* Hidden motto: same colour as the page, readable only when selected. */
+.motto{color:var(--ground)}
+.motto::selection{color:var(--ground);background:var(--accent)}
 h2{font-size:18px;font-weight:600;color:var(--muted);padding-bottom:16px}
 .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:8px 48px;border-top:1px solid var(--line);padding-block:20px 24px}
 .card h3{font-size:18px;font-weight:600}
@@ -44,7 +47,7 @@ footer a{padding-block:10px}
 <canvas aria-hidden="true"></canvas>
 <header class="w">
 <p class="name">N. Aliev</p>
-<p class="tag"><span class="role">Applied AI Engineer.</span> Turning chaos into cosmos.</p>
+<p class="tag"><span class="role">Applied AI Engineer.</span> <span class="motto">Turning chaos into cosmos.</span></p>
 </header>
 <main class="w">
 <h2>Work</h2>
